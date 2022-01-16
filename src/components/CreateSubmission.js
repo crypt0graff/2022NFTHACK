@@ -1,98 +1,99 @@
-import { Button, Text, Grid, Input, Spacer } from '@geist-ui/react';
-import { useState, useCallback } from 'react';
-import { create } from 'ipfs-http-client';
+import { Button, Text, Grid, Input, Spacer } from '@geist-ui/react'
+import { useState, useCallback } from 'react'
+import { create } from 'ipfs-http-client'
 
-const client = create('https://ipfs.infura.io:5001/api/v0');
+const client = create('https://ipfs.infura.io:5001/api/v0')
 
 const CreateSubmission = (props) => {
-  const [fileUrl, setFileUrl] = useState(``);
-  const [tag, setTag] = useState(``);
-  const [location, setLocation] = useState(``);
+	const [fileUrl, setFileUrl] = useState(``)
+	const [tag, setTag] = useState(``)
+	const [location, setLocation] = useState(``)
 
-  const [ipfsUrl, setIpfsUrl] = useState(``);
+	const [ipfsUrl, setIpfsUrl] = useState(``)
 
-  const onChange = useCallback(
-    async (e) => {
-      const file = e.target.files[0];
+	const onChange = useCallback(
+		async (e) => {
+			const file = e.target.files[0]
 
-      try {
-        const added = await client.add(file, {
-            progress: (prog) => console.log(`received: ${prog}`),
-        });
-        const url = `https://ipfs.infura.io/ipfs/${added.path}`;
-        setFileUrl(url);
+			try {
+				const added = await client.add(file, {
+					progress: (prog) => console.log(`received: ${prog}`),
+				})
+				const url = `https://ipfs.infura.io/ipfs/${added.path}`
+				setFileUrl(url)
 
-        console.log(url);
-      } catch (error) {
-        console.log('Error uploading file: ', error);
-      }
-    },
-    [fileUrl]
-  );
+				console.log(url)
+			} catch (error) {
+				console.log('Error uploading file: ', error)
+			}
+		},
+		[fileUrl]
+	)
 
-  const onTagChange = useCallback(
-    (e) => {
-      setTag(e.target.value);
-    },
-    [tag]
-  );
+	const onTagChange = useCallback(
+		(e) => {
+			setTag(e.target.value)
+		},
+		[tag]
+	)
 
-  const onLocationChange = useCallback(
-      (e) => {
-        setLocation(e.target.value);
-      },
-      [location]
-  );
+	const onLocationChange = useCallback(
+		(e) => {
+			setLocation(e.target.value)
+		},
+		[location]
+	)
 
-  const onSubmit = async () => {
-    const data = {
-      tag: tag,
-      location: location,
-      file: fileUrl,
-    }
+	const onSubmit = async () => {
+		const data = {
+			tag: tag,
+			location: location,
+			file: fileUrl,
+		}
 
-    const finalData = JSON.stringify(data)
-    console.log(finalData)
+		const finalData = JSON.stringify(data)
+		console.log(finalData)
 
-    try {
-      const added = await client.add(finalData)
-      const url = `https://ipfs.infura.io/ipfs/${added.path}`
+		try {
+			const added = await client.add(finalData)
+			const url = `https://ipfs.infura.io/ipfs/${added.path}`
 
-      if (added) {
-          setIpfsUrl(url)
-          console.log(url)
-      }
-    } catch (error) {
-      console.log('Error uploading file: ', error)
-    }
-  }
+			setIpfsUrl(url)
+			console.log(url)
+		} catch (error) {
+			console.log('Error uploading file: ', error)
+		}
+	}
 
-  return (
-    <Grid.Container justify="center" gap={3} wrap="wrap">
-      <Grid xs={16} md={6} lg={6}>
-        <Text width="100%" h2>Ready to submit?</Text>
-      </Grid>
-      <Grid xs={16} md={16} lg={24}>
-        <Input width="80%" onChange={onTagChange} >Tag Name</Input>
-      </Grid>
-      <Grid xs={16} md={16} lg={24}>
-        <Input width="80%" onChange={onLocationChange}>Location</Input>
-        <Spacer h={3} />
-      </Grid>
-      <Grid xs={16} md={16} lg={24}>
-        <input type='file' name='Asset' onChange={onChange} />
-      </Grid>
-      <Grid
-        justify="flex-start"
-        direction="row"
-        gap={5}
-      >
-        <Button type="secondary" onClick={onSubmit} >
-            Submit for Validation
-        </Button>
-      </Grid>
-    </Grid.Container>
-  );
-};
+	return (
+		<Grid.Container justify='center' gap={3} wrap='wrap'>
+			<Grid xs={16} md={6} lg={6}>
+				<Text width='100%' h2>
+					Ready to submit?
+				</Text>
+			</Grid>
+			<Grid xs={16} md={16} lg={24}>
+				<Input width='80%' onChange={onTagChange}>
+					Tag Name
+				</Input>
+			</Grid>
+			<Grid xs={16} md={16} lg={24}>
+				<Input width='80%' onChange={onLocationChange}>
+					Location
+				</Input>
+				<Spacer h={3} />
+			</Grid>
+			<Grid xs={16} md={16} lg={24}>
+				<input type='file' name='Asset' onChange={onChange} />
+				{fileUrl && <img src={fileUrl} width='200px' height='200px' />}
+			</Grid>
+			<Grid justify='flex-start' direction='row' gap={5}>
+				<Button type='secondary' onClick={onSubmit}>
+					Submit for Validation
+				</Button>
+			</Grid>
+		</Grid.Container>
+	)
+}
 
-export default CreateSubmission;
+export default CreateSubmission
