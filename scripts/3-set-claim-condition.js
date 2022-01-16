@@ -1,23 +1,24 @@
 import sdk from './1-initialize-sdk.js'
 
-import dotenv from 'dotenv'
-dotenv.config()
+const drop = sdk.getDropModule('0xF67A4d579f22ef3B2B64E6D073FEfA994E79958F')
 
-const bundleDrop = sdk.getBundleDropModule(process.env.BUNDLE_DROP_ADDRESS)
+const setTokenClaimConditions = async () => {
+	const factory = await drop.getClaimConditionsFactory()
 
-;(async () => {
-	try {
-		const claimConditionFactory = bundleDrop.getClaimConditionFactory()
-		// Specify conditions.
-		claimConditionFactory.newClaimPhase({
-			startTime: new Date(),
-			maxQuantity: 50_000,
-			maxQuantityPerTransaction: 1,
-		})
+	// Define claim phase.
+	const claimPhase = await factory.newClaimPhase({
+		startTime: new Date(),
+		maxQuantity: 10,
+		maxQuantityPerTransaction: 1,
+	})
 
-		await bundleDrop.setClaimCondition(0, claimConditionFactory)
-		console.log('✅ Sucessfully set claim condition!')
-	} catch (error) {
-		console.error('Failed to set claim condition', error)
-	}
-})()
+	// Allow snapshot for the specified list. We can add address from the frontend after the graff is validatedand minted in the dao
+	const allowList = ['[ALLOWED_ADDRESS_1]']
+
+	claimPhase.setSnapshot(allowList)
+
+	// Set claim conditions.
+	await drop.setClaimConditions(factory)
+}
+
+setTokenClaimConditions()
