@@ -1,8 +1,9 @@
 import sdk from './1-initialize-sdk.js'
 
-const bundleDrop = sdk.getBundleDropModule(
-	'0xF67A4d579f22ef3B2B64E6D073FEfA994E79958F'
-)
+import dotenv from 'dotenv'
+dotenv.config()
+
+const bundleDrop = sdk.getBundleDropModule(process.env.BUNDLE_DROP_ADDRESS)
 
 ;(async () => {
 	try {
