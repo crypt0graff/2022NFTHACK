@@ -1,6 +1,7 @@
 import { Button, Text, Grid, Input, Spacer } from '@geist-ui/react'
 import { useState, useCallback } from 'react'
 import { create } from 'ipfs-http-client'
+import ConnectWallet from './ConnectWallet'
 
 const client = create('https://ipfs.infura.io:5001/api/v0')
 
@@ -64,6 +65,14 @@ const CreateSubmission = (props) => {
 			console.log('Error uploading file: ', error)
 		}
 	}
+
+  if (!props.address) {
+    return (
+      <ConnectWallet
+        connectWallet={props.connectWallet}
+      />
+    )
+  }
 
 	return (
 		<Grid.Container justify='center' gap={3} wrap='wrap'>

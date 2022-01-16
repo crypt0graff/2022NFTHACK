@@ -4,10 +4,11 @@ import { useWeb3 } from '@3rdweb/hooks'
 import { ThirdwebSDK } from '@3rdweb/sdk'
 import { UnsupportedChainIdError } from '@web3-react/core'
 import { ethers } from 'ethers'
-import { Page, Grid, Image, Spacer, Text } from '@geist-ui/react'
-import ConnectWallet from './components/ConnectWallet'
+import { Page, Grid, Image, Spacer, Text, Button } from '@geist-ui/react'
+
 import CreateSubmission from './components/CreateSubmission'
 import DAOGallery from './components/DAOGallery'
+import {Route, Routes, Link, BrowserRouter as Router} from 'react-router-dom'
 
 // const process = dotenv.config()
 // console.log(process.env)
@@ -49,22 +50,40 @@ const App = () => {
 	}
 
 	return (
-		<Page>
-			<Grid.Container gap={2} justify='center'>
-				<Spacer h={4} />
-				<Grid xs={24}>
-					<Image width='540px' height='160px' src='/Crypt0GrafflLogo.png' />
-				</Grid>
-				{/* {!address ?
-          <ConnectWallet
-            connectWallet={connectWallet}
-          />
-        :
-          <CreateSubmission />
-        } */}
-				<CreateSubmission />
-			</Grid.Container>
-		</Page>
+    <Page>
+      <Grid.Container gap={2} justify='center'>
+        <Spacer h={4} />
+        <Grid xs={24}>
+          <Image width='540px' height='160px' src='/Crypt0GrafflLogo.png' />
+        </Grid>
+        <Router>
+          <Routes>
+            <Route
+              path='/'
+              exact 
+              element={
+                <CreateSubmission
+                  address={address}
+                  connectWallet={connectWallet}
+                />
+              }
+            />
+            <Route path='/submissions' element={<DAOGallery />} />
+          </Routes>
+          <Spacer h={3} />
+          <Grid gap={2} justify='space-between' direction='row'>
+            <Link to='/'>
+              <Button type='secondary' width='50%'>Mint</Button>
+            </Link>
+          </Grid>
+          <Grid gap={2} justify='space-between' direction='row'>
+            <Link to='/submissions'>
+              <Button type='secondary' width='50%'>Submissions</Button>
+            </Link>
+          </Grid>
+        </Router>
+      </Grid.Container>
+    </Page>
 	)
 }
 
