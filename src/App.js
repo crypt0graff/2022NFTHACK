@@ -4,9 +4,10 @@ import { useWeb3 } from '@3rdweb/hooks';
 import { ThirdwebSDK } from '@3rdweb/sdk';
 import { UnsupportedChainIdError } from "@web3-react/core";
 import { ethers } from 'ethers';
-import { Grid, Card, Image, Spacer, Text } from '@geist-ui/react';
+import { Page, Grid, Image, Spacer, Text } from '@geist-ui/react';
 import ConnectWallet from './components/ConnectWallet';
 import CreateSubmission from './components/CreateSubmission';
+import DAOGallery from './components/DAOGallery';
 
 // const process = dotenv.config()
 // console.log(process.env)
@@ -29,37 +30,42 @@ const App = () => {
 
   if (error instanceof UnsupportedChainIdError ) {
     return (
+      <Page>
+        <Grid.Container gap={2} justify="center">
+          <Spacer h={4}/>
+          <Grid xs={24}>
+            <Image width="540px" height="160px" src="/Crypt0GrafflLogo.png" />
+          </Grid>
+          <Grid xs={24} direction="column"
+          alignItems='center'>
+            <Text h2>Please connect to Polygon Mumbai Testnet</Text>
+            <Text p>
+              This dapp only works on the Polygon testnet network, please switch networks
+              in your connected wallet.
+            </Text>
+          </Grid>
+        </Grid.Container>
+      </Page>
+    );
+  }
+
+  return (
+    <Page>
       <Grid.Container gap={2} justify="center">
         <Spacer h={4}/>
         <Grid xs={24}>
           <Image width="540px" height="160px" src="/Crypt0GrafflLogo.png" />
         </Grid>
-        <Grid xs={24} direction="column"
-        alignItems='center'>
-          <Text h2>Please connect to Polygon Mumbai Testnet</Text>
-          <Text p>
-            This dapp only works on the Polygon testnet network, please switch networks
-            in your connected wallet.
-          </Text>
-        </Grid>
+        {/* {!address ?
+          <ConnectWallet
+            connectWallet={connectWallet}
+          />
+        :
+          <CreateSubmission />
+        } */}
+        <DAOGallery />
       </Grid.Container>
-    );
-  }
-
-  return (
-    <Grid.Container gap={2} justify="center">
-      <Spacer h={4}/>
-      <Grid xs={24}>
-        <Image width="540px" height="160px" src="/Crypt0GrafflLogo.png" />
-      </Grid>
-      {!address ?
-        <ConnectWallet
-          connectWallet={connectWallet}
-        />
-      :
-        <CreateSubmission />
-      }
-    </Grid.Container>
+    </Page>
   )
 };
 
