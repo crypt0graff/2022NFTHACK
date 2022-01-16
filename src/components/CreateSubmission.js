@@ -3,6 +3,14 @@ import { useState, useCallback } from 'react'
 import { create } from 'ipfs-http-client'
 import ConnectWallet from './ConnectWallet'
 
+import { useWeb3 } from '@3rdweb/hooks'
+import { ThirdwebSDK } from '@3rdweb/sdk'
+import { ethers } from 'ethers'
+
+const sdk = new ThirdwebSDK('rinkeby')
+
+const drop = sdk.getDropModule('0xF67A4d579f22ef3B2B64E6D073FEfA994E79958F')
+
 const client = create('https://ipfs.infura.io:5001/api/v0')
 
 const CreateSubmission = (props) => {
@@ -24,6 +32,7 @@ const CreateSubmission = (props) => {
 				setFileUrl(url)
 
 				console.log(url)
+				drop.lazyMintNft(url)
 			} catch (error) {
 				console.log('Error uploading file: ', error)
 			}
@@ -66,13 +75,9 @@ const CreateSubmission = (props) => {
 		}
 	}
 
-  if (!props.address) {
-    return (
-      <ConnectWallet
-        connectWallet={props.connectWallet}
-      />
-    )
-  }
+	if (!props.address) {
+		return <ConnectWallet connectWallet={props.connectWallet} />
+	}
 
 	return (
 		<Grid.Container justify='center' gap={3} wrap='wrap'>
