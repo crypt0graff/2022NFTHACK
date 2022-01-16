@@ -1,6 +1,6 @@
 import sdk from './1-initialize-sdk.js'
 
-const drop = sdk.getDropModule('0xF67A4d579f22ef3B2B64E6D073FEfA994E79958F')
+const drop = sdk.getDropModule('0x2D5442A6eC59B59A0837f45313d2f41A6D7a9d8b')
 
 const setTokenClaimConditions = async () => {
 	const factory = await drop.getClaimConditionsFactory()
@@ -13,7 +13,7 @@ const setTokenClaimConditions = async () => {
 	})
 
 	// Allow snapshot for the specified list. We can add address from the frontend after the graff is validatedand minted in the dao
-	const allowList = ['[ALLOWED_ADDRESS_1]']
+	const allowList = ['0xc40a8C17aF0D57d788d0502f9293aCF0108823d5']
 
 	claimPhase.setSnapshot(allowList)
 
